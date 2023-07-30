@@ -2,12 +2,17 @@ const Auth = require('../models/Auth');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 require('dotenv/config');
+const { validationResult } = require('express-validator');
 
 const jwtSecret = process.env.JWT_SECRET || 'my_secret_key';
 const jwtExpiresIn = process.env.JWT_EXPIRES_IN || '1d';
 
 const authController = {
     async registerUser(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         try {
             const { email, password } = req.body;
             const user = await Auth.findOne({ where: { email } });
@@ -29,6 +34,10 @@ const authController = {
     },
 
     async loginUser(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         try {
             const { email, password } = req.body;
             const user = await Auth.findOne({ where: { email } });
