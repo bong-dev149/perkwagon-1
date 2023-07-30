@@ -5,7 +5,7 @@ const userController = {
         try {
 
             const { name, email, phoneNumber } = req.body;
-            const user = await User.create({ name, email, phoneNumber });
+            let user = await User.create({ name, email, phoneNumber });
 
             res.status(201).json({ message: 'User created successfully', user });
         } catch (err) {

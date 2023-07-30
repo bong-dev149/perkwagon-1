@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 require('dotenv/config');
 
-const saltRounds = process.env.SALT_ROUNDS || 10;
 const jwtSecret = process.env.JWT_SECRET || 'my_secret_key';
 const jwtExpiresIn = process.env.JWT_EXPIRES_IN || '1d';
 
@@ -17,21 +16,15 @@ const authController = {
                 return res.status(400).json({ error: 'Email already exist' });
             }
             
-            
-            // const salt = bcrypt.genSaltSync(10);
-            // console.log(salt)
-            // const hashedPassword = bcrypt.hashSync(password, salt);
-            
+             
+            const hashedPassword= await bcrypt.hash(password, 10);
+            let newUser = await Auth.create({ email, password: hashedPassword });
 
-            const hashedPassword = bcrypt.hashSync(password, 10);
-            console.log(hashedPassword)
-            user = await Auth.create({ email:email, password: hashedPassword });
-
-            const token = jwt.sign({ id: user.id, email: user.email }, jwtSecret, { expiresIn: jwtExpiresIn });
+            const token = jwt.sign({ id: newUser.id, email: newUser.email }, jwtSecret, { expiresIn: jwtExpiresIn });
             res.status(201).json({ message: 'User registered successfully', token });
 
         } catch (err) {
-            res.status(500).json({ error: err.message });
+            res.status(500).json({ error: 'Error registering new user' });
         }
     },
 
@@ -49,7 +42,7 @@ const authController = {
                 return res.status(401).json({ error: 'Invalid credentials' });
             }
 
-            const token = jwt.sign({ id: user.id, email: user.email }, 'your_secret_key', { expiresIn: '1h' });
+            const token = jwt.sign({ id: user.id, email: user.email }, jwtSecret, { expiresIn: jwtExpiresIn });
             res.json({ message: 'Login successful', token });
             
         } catch (err) {

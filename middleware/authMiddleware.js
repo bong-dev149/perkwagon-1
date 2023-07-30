@@ -1,13 +1,14 @@
 const jwt = require('jsonwebtoken');
-
+require('dotenv/config');
+const jwtSecret = process.env.JWT_SECRET
 const authenticateToken = (req, res, next) => {
-    const token = req.header('Authorization');
+    const token = req.header('token');
 
     if (!token) {
         return res.status(401).json({ error: 'No token provided' });
     }
 
-    jwt.verify(token, 'your_secret_key', (err, user) => {
+    jwt.verify(token, jwtSecret, (err, user) => {
         if (err) {
             return res.status(403).json({ error: 'Invalid token' });
         }
