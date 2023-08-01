@@ -1,17 +1,23 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const tokenController = {
-    genToken: async (data, expiry, SECRET) => {
-        const token = jwt.sign(data, SECRET, { expiresIn: expiry });
-        return token;
+module.exports = {
+    genToken: (data, expiry, SECRET) => {
+        return new Promise((resolve, reject) => {
+            try {
+                const token = jwt.sign(data, SECRET, { expiresIn: expiry });
+                resolve(token)
+            } catch (err) {
+                reject(err)
+            }
+        })
     },
-    verifyToken: async (token, SECRET) => {
-        try {
-            const payload = jwt.verify(token, SECRET);
-            return payload;
-        } catch (error) {
-            throw new Error(err)
-        }
-    }
-}
-module.exports = tokenController;
+    verifyToken: (token, SECRET) => {
+        return new Promise((resolve, reject) => {
+            try {
+                resolve(jwt.verify(token, SECRET))
+            } catch (err) {
+                reject(err)
+            }
+        });
+    },
+};

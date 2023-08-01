@@ -5,7 +5,6 @@ const cors = require('cors');
 require('dotenv/config');
 const authRoutes = require('./routes/authRoute');
 /*const userRoutes = require('./routes/userRoutes');
-const authRoutes = require('./routes/authRoutes');
 const authenticateToken = require('./app/middleware/authMiddleware');*/
 
 // Express middleware to parse JSON requests

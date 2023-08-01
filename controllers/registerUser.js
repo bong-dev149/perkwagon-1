@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const cnfEmail = require('../emailService/confirmEmailResolver');
 require('dotenv/config');
 const { validationResult } = require('express-validator');
+
 const registerUser=async (req, res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -16,17 +17,14 @@ const registerUser=async (req, res)=>{
             return res.status(400).json({ error: 'Email already exist' });
         }
 
-
         const hashedPassword = await bcrypt.hash(password, 10);
         user = await Auth.create({ email: email, password: hashedPassword });
         res.status(201).json({ message: 'User registered successfully' });
 
-        await cnfEmail(user);
-
-
-
+        const msg=await cnfEmail(user);
+        console.log(msg);
     } catch (err) {
-        res.status(500).json(err.message);
+        res.status(500).json({ error: 'Error registering user' });
     }
 };
 module.exports = registerUser;

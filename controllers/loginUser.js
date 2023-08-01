@@ -1,11 +1,15 @@
 const Auth = require('../models/Auth');
 const tokenController = require('../Reusable module/tokenController');
+const {expiresInToMilliseconds} = require('../Reusable module/utils');
 const bcrypt = require('bcryptjs');
-const cnfEmail = require('../emailService/confirmEmailResolver');
 require('dotenv/config');
 const { validationResult } = require('express-validator');
+
 const loginUser= async (req, res)=>{
+
+    const expiresIn=process.env.EXPIRES_IN;
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
@@ -23,13 +27,23 @@ const loginUser= async (req, res)=>{
         if (!isPasswordMatch) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
-
-        const token = await tokenController.genToken(
-            { userId: user.id, email: user.email },
-            "30m",
+        //Get Access Token
+        const acccessToken = await tokenController.genToken(
+            { id: user.id, email: user.email },
+            expiresIn,
             process.env.JWT_SECRET
         );
-        res.json({ message: 'Login successful', token });
+
+        // Get the timestamp of the token expiration
+        const tokenExpiration = new Date(Date.now() + expiresInToMilliseconds(expiresIn)).toISOString();
+        
+        //Get Refresh Token
+        const refreshToken = await tokenController.genToken(
+            { id: user.id, email: user.email },
+            "28d",
+            process.env.JWT_REFRESH_SECRET
+        );
+        res.json({ message: 'Login successful', acccessToken,tokenExpiration, refreshToken });
 
     } catch (err) {
         res.status(500).json({ error: 'Error logging in' });
