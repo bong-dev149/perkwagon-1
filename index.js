@@ -16,7 +16,7 @@ app.use(cors());
 //app.use('/users', authenticateToken, userRoutes);
 
 
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 
 
 
@@ -30,7 +30,7 @@ sequelize
         console.error('Unable to connect to the database:', err);
     });
 
-sequelize.sync({ force: true });
+sequelize.sync();
 console.log("All models were synchronized successfully.");
 
 // Start the server
