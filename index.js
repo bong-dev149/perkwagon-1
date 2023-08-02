@@ -4,15 +4,12 @@ const sequelize=require('./db/connection');
 const cors = require('cors');
 require('dotenv/config');
 const authRoutes = require('./routes/authRoute');
-/*const userRoutes = require('./routes/userRoutes');
-const authenticateToken = require('./app/middleware/authMiddleware');*/
+const deleteExpiredTokens = require('./scheduled_tasks/deleteExpiredTokens');
+
 
 // Express middleware to parse JSON requests
 app.use(express.json());
 app.use(cors());
-
-// Register the user routes (protected by authentication)
-//app.use('/users', authenticateToken, userRoutes);
 
 
 app.use('/api/auth', authRoutes);
@@ -31,6 +28,9 @@ sequelize
 
 sequelize.sync();
 console.log("All models were synchronized successfully.");
+
+// Start the token deletion job
+deleteExpiredTokens();
 
 // Start the server
 const port = process.env.PORT || 3000;
