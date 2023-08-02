@@ -11,6 +11,11 @@ const BlockedToken = sequelize.define('BlockedToken', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    tokenExpiry: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+
 }, {
     tableName: 'blockedtoken'
 });

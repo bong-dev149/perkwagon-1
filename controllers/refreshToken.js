@@ -1,29 +1,38 @@
-const tokenController = require('../Reusable module/tokenController');
-const {expiresInToMilliseconds} = require('../Reusable module/utils');
-const refreshToken=async (req, res)=>{
-    const token = req.body.refreshToken;
-    if (!token) {
-        return res.status(401).json({ error: 'No token provided' });
-    }
-    try {
-        const expiresIn = process.env.EXPIRES_IN; 
-        const user = await tokenController.verifyToken(token, process.env.JWT_REFRESH_SECRET);
+const tokenController = require('../reusable_module/tokenController');
+const { expiresInToMilliseconds } = require('../reusable_module/utils');
 
-        if(!user){
+const refreshToken = async (req, res) => {
+    try {
+        const expiresIn = process.env.EXPIRES_IN;
+
+        // Validate the token
+        const token = req.body.refreshToken;
+        if (!token) {
+            return res.status(401).json({ error: 'No token provided' });
+        }
+
+        // Verify the token
+        const user = await tokenController.verifyToken(token, process.env.JWT_REFRESH_SECRET);
+        if (!user) {
             return res.status(401).json({ error: 'Invalid token' });
         }
+
+        // Generate new access token
         const acccessToken = await tokenController.genToken(
             { id: user.id, email: user.email },
-            expiresIn,
-            process.env.JWT_SECRET
+            process.env.JWT_ACCESS_EXPIRES_IN,
+            process.env.JWT_ACCESS_SECRET
         );
-        // Get the timestamp of the token expiration
-        const tokenExpiration = new Date(Date.now() + expiresInToMilliseconds(expiresIn)).toISOString();
 
+        // Get the timestamp of the token expiration
+        const tokenExpiration = new Date(Date.now() + expiresInToMilliseconds(process.env.JWT_ACCESS_EXPIRES_IN)).toISOString();
+
+        //send response
         res.json({ message: 'Refresh access token generated', acccessToken, tokenExpiration });
+
     } catch (err) {
         res.status(500).json(err.message);
     }
 };
 
-module.exports=refreshToken
+module.exports = refreshToken
