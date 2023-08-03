@@ -26,7 +26,7 @@ const forgotPassword = async (req, res) => {
         await BlockedToken.create({ token:resetToken, tokenExpiry: resetTokenExpiry });
 
         // reset password link url
-        const url = `${process.env.URL}/api/auth/resetPassword?token=${resetToken}`;
+        const url = `${process.env.HOST}:${process.env.PORT}/api/auth/resetPassword?token=${resetToken}`;
 
         const mailHTML = `Hi! ${email} please click on the link below to reset your password <a href=${url}>Reset Password</a>`
         const mailSubject = "Reset Password"
