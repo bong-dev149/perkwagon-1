@@ -4,7 +4,7 @@ const sequelize=require('./db/connection');
 const cors = require('cors');
 require('dotenv/config');
 const authRoutes = require('./routes/authRoute');
-const deleteExpiredTokens = require('./scheduled_tasks/deleteExpiredTokens');
+//const deleteExpiredTokens = require('./scheduled_tasks/deleteExpiredTokens');
 
 
 // Express middleware to parse JSON requests
@@ -30,7 +30,7 @@ sequelize.sync();
 console.log("All models were synchronized successfully.");
 
 // Start the token deletion job
-deleteExpiredTokens();
+//deleteExpiredTokens();
 
 // Start the server
 const port = process.env.PORT || 3000;

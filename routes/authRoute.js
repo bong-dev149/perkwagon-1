@@ -24,7 +24,7 @@ const updatePasswordRules = [
 ];
 // Define routes
 router.get('/',tokenVerify, emailVerification);
-router.post('/register', registerValidationRules, registerUser);
+router.post('/register',registerValidationRules,  registerUser);
 router.post('/login', loginValidationRules, loginUser);
 router.post('/refreshtoken',refreshToken);
 router.post('/forgetPassword',loginValidationRules,forgetPassword);
