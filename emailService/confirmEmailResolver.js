@@ -14,8 +14,8 @@ const confirmEmailResolver = async (user) => {
                 );
                 const tokenExpiry = Date.now() + parseInt(process.env.EXPIRES_IN_MILISECONDS);
                 await BlockedToken.create({ token: token, tokenExpiry: tokenExpiry });
-                
-                const url = `${process.env.HOST}:${process.env.PORT}/api/auth?token=${token}`;
+
+                const url = `${process.env.HOST}/api/auth?token=${token}`;
 
                 // send the mail to the user
                 mailInfo = {
@@ -23,7 +23,7 @@ const confirmEmailResolver = async (user) => {
                     subject: "Confirm your email",
                     html: `<h1>Hello ${user.email}</h1><p>Please click on the link below to confirm your email</p><a href="${url}">Confirm Email</a> within 30 minutes`,
                 };
-               
+
                 resolve(await sendEmail(user.email, mailInfo.subject, mailInfo.html))
             } catch (err) {
                 reject(err)
