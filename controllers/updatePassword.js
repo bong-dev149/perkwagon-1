@@ -20,7 +20,7 @@ const updatePassword = async (req, res) => {
 
             //set tokenExpiry field for Block the token
             const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
-            const resetTokenExpiry = Date.now()+istOffset;
+            const resetTokenExpiry = Date.now();
             await BlockedToken.update({ tokenExpiry: resetTokenExpiry }, {
                 where: {
                     token: resetToken

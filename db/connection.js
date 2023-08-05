@@ -8,6 +8,8 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
     host: config.host,
     dialect: config.dialect,
     port: config.port,
+    // Set the timezone option
+    timezone: '+05:30', // Example: Indian Standard Time (IST)
 });
 
 //const sequelize = new Sequelize('mysql://doadmin:AVNS_MNHtg4fuAOBWyfP4OAS@perkwagon-db-do-user-14449570-0.b.db.ondigitalocean.com:25060/defaultdb?ssl-mode=REQUIRED')

@@ -23,7 +23,7 @@ const forgotPassword = async (req, res) => {
 
         // save token in database
         const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
-        const resetTokenExpiry = Date.now() + istOffset+ parseInt(process.env.EXPIRES_IN_MILISECONDS);
+        const resetTokenExpiry = Date.now() + parseInt(process.env.EXPIRES_IN_MILISECONDS);
         await BlockedToken.create({ token:resetToken, tokenExpiry: resetTokenExpiry });
 
         // reset password link url
