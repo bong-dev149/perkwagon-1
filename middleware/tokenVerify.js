@@ -10,7 +10,6 @@ const  tokenVerify= async(req, res, next) => {
             throw new Error("No token provided");
         }
         //check token is valid or not
-        const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
         const currentTime=Date.now();
         const validToken = await BlockedToken.findOne({ where: {token:token, tokenExpiry: { [Op.gt]: currentTime } } });
         console.log(validToken);

@@ -12,7 +12,7 @@ const confirmEmailResolver = async (user) => {
                     process.env.JWT_VERIFY_EXPIRES_IN,
                     process.env.JWT_SECRET
                 );
-                const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
+           
                 const tokenExpiry = Date.now() + parseInt(process.env.EXPIRES_IN_MILISECONDS);
                 await BlockedToken.create({ token: token, tokenExpiry: tokenExpiry });
 

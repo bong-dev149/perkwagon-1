@@ -25,7 +25,7 @@ const registerUser=async (req, res)=>{
         const hashedPassword = await bcrypt.hash(password, 10);
         
         // Create a new user
-        user = await Auth.create({ email: email, password: hashedPassword });
+        user = await Auth.create({ email: email, password: hashedPassword, typeofuser: typeofuser });
 
         //send response
         res.status(201).json({ message: 'User registered successfully' });

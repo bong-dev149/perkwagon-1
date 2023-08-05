@@ -19,6 +19,10 @@ const Auth = sequelize.define('Auth', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    typeofuser: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     verified:{
         type: DataTypes.BOOLEAN,
         allowNull: false,
