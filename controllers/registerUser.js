@@ -13,7 +13,7 @@ const registerUser=async (req, res)=>{
 
     try {
         // Get data from request body
-        const { email, password } = req.body;
+        const { email, password, typeofuser } = req.body;
       
         // Check if user exists
         let user = await Auth.findOne({ where: { email } });
