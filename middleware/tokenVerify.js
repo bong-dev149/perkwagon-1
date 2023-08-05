@@ -1,3 +1,4 @@
+const { off } = require('process');
 const BlockedToken = require('../models/BlockedToken');
 const {verifyToken}=require('../reusable_module/tokenController');
 const { Op } = require('sequelize');
@@ -9,7 +10,9 @@ const  tokenVerify= async(req, res, next) => {
             throw new Error("No token provided");
         }
         //check token is valid or not
-        const validToken = await BlockedToken.findOne({ where: {token:token, tokenExpiry: { [Op.gt]: Date.now() } } });
+        const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
+        const currentTime=Date.now()+istOffset;
+        const validToken = await BlockedToken.findOne({ where: {token:token, tokenExpiry: { [Op.gt]: currentTime } } });
         console.log(validToken);
         if (!validToken) {
             throw new Error( "Invalid/Expired link")
