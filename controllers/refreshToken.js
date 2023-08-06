@@ -18,7 +18,7 @@ const refreshToken = async (req, res) => {
         }
 
         // Generate new access token
-        const acccessToken = await tokenController.genToken(
+        const accessToken = await tokenController.genToken(
             { id: user.id, email: user.email },
             process.env.JWT_ACCESS_EXPIRES_IN,
             process.env.JWT_ACCESS_SECRET
@@ -28,7 +28,7 @@ const refreshToken = async (req, res) => {
         const tokenExpiration = new Date(Date.now() + expiresInToMilliseconds(process.env.JWT_ACCESS_EXPIRES_IN)).toISOString();
 
         //send response
-        res.json({ message: 'Refresh access token generated', acccessToken, tokenExpiration });
+        res.json({ message: 'Refresh access token generated', accessToken, tokenExpiration });
 
     } catch (err) {
         res.status(500).json(err.message);
