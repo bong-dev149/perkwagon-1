@@ -4,39 +4,39 @@ const cnfEmail = require('../emailService/confirmEmailResolver');
 require('dotenv/config');
 const { validationResult } = require('express-validator');
 
-const registerUser=async (req, res)=>{
+const registerUser = async (req, res) => {
     //Validate the request
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ type: 'validationError', msg: { errors: errors.array() } });
     }
 
     try {
         // Get data from request body
         const { email, password, typeofuser } = req.body;
-      
+
         // Check if user exists
         let user = await Auth.findOne({ where: { email } });
         if (user) {
-            return res.status(400).json({ error: 'Email already exist' });
+            return res.status(400).json({ type: 'emailError', msg: 'Email already exist' });
         }
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-        
+
         // Create a new user
         user = await Auth.create({ email: email, password: hashedPassword, typeofuser: typeofuser });
 
         //send response
-        res.status(201).json({ message: 'User registered successfully' });
+        res.status(201).json({ msg: 'User registered successfully' });
 
         //send confirmation email
-        const msg=await cnfEmail(user);
+        const msg = await cnfEmail(user);
         console.log(msg);
 
     } catch (err) {
-        res.status(500).json({ error: 'Error registering user' });
-        
+        res.status(500).json({ msg: 'Error registering user' });
+
     }
 };
 module.exports = registerUser;

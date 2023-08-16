@@ -10,21 +10,21 @@ const loginUser = async (req, res) => {
     // Validate the request
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ type: 'validationError', msg: { errors: errors.array() } });
     }
- 
+
     try {
         // Get data from request body
         const { email, password } = req.body;
         // Check if user exists
         const user = await Auth.findOne({ where: { email } });
         if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+            return res.status(404).json({ type: 'userError', msg: 'User not found' });
         }
 
         // Check if user is verified
         if (user.verified === false) {
-            return res.status(401).json({ error: 'Email not verified' });
+            return res.status(401).json({ type: 'emailError', msg: 'Email not verified' });
         }
 
         // Check if password is correct
@@ -51,10 +51,10 @@ const loginUser = async (req, res) => {
         );
 
         //send response
-        res.json({ message: 'Login successful',typeofuser:user.typeofuser, acccessToken, tokenExpiration, refreshToken });
+        res.json({ message: 'Login successful', typeofuser: user.typeofuser, acccessToken, tokenExpiration, refreshToken });
 
     } catch (err) {
-  
+
         res.status(500).json({ error: 'Error logging in' });
     }
 }
