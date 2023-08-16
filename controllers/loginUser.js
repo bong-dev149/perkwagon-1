@@ -51,7 +51,7 @@ const loginUser = async (req, res) => {
         );
 
         //send response
-        res.json({ message: 'Login successful', typeofuser: user.typeofuser, acccessToken, tokenExpiration, refreshToken });
+        res.json({ msg: 'Login successful', typeofuser: user.typeofuser, acccessToken, tokenExpiration, refreshToken });
 
     } catch (err) {
 

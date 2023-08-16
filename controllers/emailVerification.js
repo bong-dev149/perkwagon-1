@@ -28,7 +28,7 @@ const verify = async (req, res) => {
             });
 
             //send response
-            res.status(200).json({ message: 'Successfully verified' });
+            res.status(200).json({ msg: 'Successfully verified' });
 
         } else {
             res.status(400).json({error:req.error});

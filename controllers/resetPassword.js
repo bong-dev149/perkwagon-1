@@ -6,7 +6,7 @@ const resetPassword = async (req, res) => {
             const resetToken = req.query.token;
 
             //send response
-            res.status(200).json({ message: "New password form", token: resetToken })
+            res.status(200).json({ msg: "New password form", token: resetToken })
         }
         else{
             //send response

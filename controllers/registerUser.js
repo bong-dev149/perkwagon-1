@@ -13,7 +13,7 @@ const registerUser = async (req, res) => {
 
     try {
         // Get data from request body
-        const { email, password, typeofuser } = req.body;
+        const { email, password } = req.body;
 
         // Check if user exists
         let user = await Auth.findOne({ where: { email } });
@@ -25,7 +25,7 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create a new user
-        user = await Auth.create({ email: email, password: hashedPassword, typeofuser: typeofuser });
+        user = await Auth.create({ email: email, password: hashedPassword, typeofuser: 'Normal' });
 
         //send response
         res.status(201).json({ msg: 'User registered successfully' });

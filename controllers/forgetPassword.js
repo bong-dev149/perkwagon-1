@@ -39,7 +39,7 @@ const forgotPassword = async (req, res) => {
         res.status(200).send(emailResponse)
 
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json({msg: err.message});
     }
 };
 
