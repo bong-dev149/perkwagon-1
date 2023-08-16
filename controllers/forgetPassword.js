@@ -11,7 +11,7 @@ const forgotPassword = async (req, res) => {
         // check if the user exists or not
         const user = await Auth.findOne({ where: { email } });
         if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+            return res.status(404).json({ type: 'userError', msg: 'User not found' });
         }
 
         // if exists, generate token
@@ -22,9 +22,9 @@ const forgotPassword = async (req, res) => {
         );
 
         // save token in database
-       
+
         const resetTokenExpiry = Date.now() + parseInt(process.env.EXPIRES_IN_MILISECONDS);
-        await BlockedToken.create({ token:resetToken, tokenExpiry: resetTokenExpiry });
+        await BlockedToken.create({ token: resetToken, tokenExpiry: resetTokenExpiry });
 
         // reset password link url
         const url = `${process.env.HOST}/api/auth/resetPassword?token=${resetToken}`;
@@ -36,10 +36,10 @@ const forgotPassword = async (req, res) => {
         const emailResponse = await sendMail(email, mailSubject, mailHTML)
 
         //send respond
-        res.status(200).send(emailResponse)
+        res.status(200).json({ msg: emailResponse })
 
     } catch (err) {
-        res.status(500).json({msg: err.message});
+        res.status(500).json({ msg: err.message });
     }
 };
 
