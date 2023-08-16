@@ -9,7 +9,7 @@ const tokenVerify = async (req, res, next) => {
         if (!token) {
             const Error1 = new Error();
             Error1.type = "tokenError";
-            Error1.message = "No token provided";
+            Error1.msg = "No token provided";
             throw Error1;
         }
         //check token is valid or not
@@ -18,8 +18,8 @@ const tokenVerify = async (req, res, next) => {
         console.log(validToken);
         if (!validToken) {
             const Error2 = new Error();
-            Error2.type = "InvalidToken";
-            Error2.message = "Invalid/Expired link";
+            Error2.type = "invalidToken";
+            Error2.msg = "Invalid/Expired link";
             throw Error2;
         }
         //verify token
