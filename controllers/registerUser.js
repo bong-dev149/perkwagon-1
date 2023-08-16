@@ -18,7 +18,7 @@ const registerUser = async (req, res) => {
         // Check if user exists
         let user = await Auth.findOne({ where: { email } });
         if (user) {
-            return res.status(400).json({ type: 'emailError', msg: 'Email already exist' });
+            return res.status(409).json({ type: 'emailError', msg: 'Email already exist' });
         }
 
         // Hash the password
@@ -28,7 +28,7 @@ const registerUser = async (req, res) => {
         user = await Auth.create({ email: email, password: hashedPassword, typeofuser: 'Normal' });
 
         //send response
-        res.status(201).json({ msg: 'User registered successfully' });
+        res.status(201).json({ msg: 'Verification email send to to your email address' });
 
         //send confirmation email
         const msg = await cnfEmail(user);
