@@ -16,7 +16,7 @@ const confirmEmailResolver = async (user) => {
                 const tokenExpiry = Date.now() + parseInt(process.env.EXPIRES_IN_MILISECONDS);
                 await BlockedToken.create({ token: token, tokenExpiry: tokenExpiry });
 
-                const url = `${process.env.HOST}/api/auth?token=${token}`;
+                const url = `https://perkwagon-test.netlify.app/auth/verifyEmail/${token}`;
 
                 // send the mail to the user
                 mailInfo = {

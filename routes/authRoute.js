@@ -23,7 +23,7 @@ const updatePasswordRules = [
     check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
 ];
 // Define routes
-router.get('/',tokenVerify, emailVerification);
+router.get('/verifyEmail',tokenVerify, emailVerification);
 router.post('/register',registerValidationRules,  registerUser);
 router.post('/login', loginValidationRules, loginUser);
 router.post('/refreshtoken',refreshToken);
