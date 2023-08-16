@@ -27,7 +27,7 @@ const forgotPassword = async (req, res) => {
         await BlockedToken.create({ token: resetToken, tokenExpiry: resetTokenExpiry });
 
         // reset password link url
-        const url = `${process.env.HOST}/api/auth/resetPassword?token=${resetToken}`;
+        const url = `https://perkwagon-test.netlify.app/auth/updatePassword/${resetToken}`;
 
         const mailHTML = `Hi! ${email} please click on the link below to reset your password <a href=${url}>Reset Password</a>`
         const mailSubject = "Reset Password"
