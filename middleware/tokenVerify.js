@@ -29,7 +29,7 @@ const tokenVerify = async (req, res, next) => {
         next()
     } catch (error) {
         //set error in req
-        req.error = error.message;
+        req.error = error;
         //next middleware
         next()
     }
