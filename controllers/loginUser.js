@@ -34,20 +34,22 @@ const loginUser = async (req, res) => {
         }
 
         //Get Access Token
+        const secretKey=(user.typeofuser==='admin')?process.env.JWT_ACCESS_SECRET_ADMIN:process.env.JWT_ACCESS_SECRET;
         const acccessToken = await tokenController.genToken(
             { id: user.id, email: user.email },
             process.env.JWT_ACCESS_EXPIRES_IN,
-            process.env.JWT_ACCESS_SECRET
+            secretKey
         );
 
         // Get the timestamp of the token expiration
         const tokenExpiration = new Date(Date.now() + expiresInToMilliseconds(process.env.JWT_ACCESS_EXPIRES_IN)).toISOString();
 
         //Get Refresh Token
+        const refreshSecretKey=(user.typeofuser==='admin')?process.env.JWT_REFRESH_SECRET_ADMIN:process.env.JWT_REFRESH_SECRET;
         const refreshToken = await tokenController.genToken(
             { id: user.id, email: user.email },
             process.env.JWT_REFRESH_EXPIRES_IN,
-            process.env.JWT_REFRESH_SECRET
+            refreshSecretKey
         );
 
         //send response
