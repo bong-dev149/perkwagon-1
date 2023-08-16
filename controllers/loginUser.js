@@ -24,13 +24,13 @@ const loginUser = async (req, res) => {
 
         // Check if user is verified
         if (user.verified === false) {
-            return res.status(401).json({ type: 'emailError', msg: 'Email not verified' });
+            return res.status(401).json({ type: 'emailVerificationError', msg: 'Email not verified' });
         }
 
         // Check if password is correct
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+            return res.status(401).json({ type:'invalid', msg: 'Invalid credentials' });
         }
 
         //Get Access Token
