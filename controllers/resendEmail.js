@@ -14,7 +14,7 @@ const resendEmail=async(req,res)=>{
 
         //send confirmation email
         const msg = await cnfEmail(user);
-        console.log(msg);
+        res.json({msg:msg});
         
     } catch (error) {
         res.status(500).json(error );
