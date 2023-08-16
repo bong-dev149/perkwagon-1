@@ -29,6 +29,6 @@ router.post('/login', loginValidationRules, loginUser);
 router.post('/refreshtoken',refreshToken);
 router.post('/forgetPassword',loginValidationRules,forgetPassword);
 router.get('/resetPassword',tokenVerify,resetPassword);
-router.put('/resetPassword', tokenVerify, updatePasswordRules, updatePassword );
+router.patch('/resetPassword', tokenVerify, updatePasswordRules, updatePassword );
 router.post('/resendEmail',resendEmail);
 module.exports = router;
