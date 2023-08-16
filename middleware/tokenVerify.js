@@ -7,8 +7,9 @@ const tokenVerify = async (req, res, next) => {
         //get token from query
         const token = req.query.token;
         if (!token) {
-            const Error1 = new Error("No token provided");
+            const Error1 = new Error();
             Error1.type = "tokenError";
+            Error1.message = "No token provided";
             throw Error1;
         }
         //check token is valid or not
@@ -16,8 +17,9 @@ const tokenVerify = async (req, res, next) => {
         const validToken = await BlockedToken.findOne({ where: { token: token, tokenExpiry: { [Op.gt]: currentTime } } });
         console.log(validToken);
         if (!validToken) {
-            const Error2 = new Error("Invalid/Expired link");
+            const Error2 = new Error();
             Error2.type = "InvalidToken";
+            Error2.message = "Invalid/Expired link";
             throw Error2;
         }
         //verify token
