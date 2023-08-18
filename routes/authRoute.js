@@ -6,7 +6,6 @@ const emailVerification = require('../controllers/emailVerification');
 const forgetPassword=require('../controllers/forgetPassword');
 const refreshToken=require('../controllers/refreshToken');
 const { check } = require('express-validator');
-const resetPassword = require('../controllers/resetPassword');
 const updatePassword = require('../controllers/updatePassword');
 const resendEmail = require('../controllers/resendEmail');
 const tokenVerify = require('../middleware/tokenVerify');
