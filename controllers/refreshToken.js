@@ -19,7 +19,7 @@ const refreshToken = async (req, res) => {
 
         // Generate new access token
         const accessToken = await tokenController.genToken(
-            { id: user.id, email: user.email },
+            { auth_id: user.auth_id, email: user.email },
             process.env.JWT_ACCESS_EXPIRES_IN,
             process.env.JWT_ACCESS_SECRET
         );
@@ -31,7 +31,7 @@ const refreshToken = async (req, res) => {
         res.json({ msg: 'Refresh access token generated', accessToken, tokenExpiration });
 
     } catch (err) {
-        res.status(500).json(err.message);
+        res.status(500).json({ msg: 'Internal Server Error' });
     }
 };
 

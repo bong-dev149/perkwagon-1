@@ -17,7 +17,7 @@ const resendEmail=async(req,res)=>{
         res.json({msg:msg});
         
     } catch (error) {
-        res.status(500).json(error );
+        res.status(500).json({msg:"Internal Server Error"} );
     }
 };
 module.exports=resendEmail;

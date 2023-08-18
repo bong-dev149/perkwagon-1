@@ -14,7 +14,7 @@ const verify = async (req, res) => {
             //update the verify status in database
             await Auth.update({ verified: true }, {
                 where: {
-                    id: user.id
+                    auth_id: user.auth_id
                 }
             });
 
@@ -31,10 +31,10 @@ const verify = async (req, res) => {
             res.status(200).json({ msg: 'Successfully verified' });
 
         } else {
-            res.status(400).json({error:req.error});
+            res.status(400).json(req.error);
         }
     } catch (err) {
-        res.status(400).json({ error: 'Verification Failed' });
+        res.status(400).json({ msg: 'Verification Failed' });
     }
 
 }

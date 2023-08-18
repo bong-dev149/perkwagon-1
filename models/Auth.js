@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db/connection');
 
 const Auth = sequelize.define('Auth', {
-    id: {
+    auth_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,

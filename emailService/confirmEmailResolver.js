@@ -8,7 +8,7 @@ const confirmEmailResolver = async (user) => {
             try {
                 // generate the token for confirmation email valid for 30m
                 const token = await tokenController.genToken(
-                    { id: user.id, email: user.email },
+                    { auth_id: user.auth_id, email: user.email },
                     process.env.JWT_VERIFY_EXPIRES_IN,
                     process.env.JWT_SECRET
                 );
@@ -16,7 +16,7 @@ const confirmEmailResolver = async (user) => {
                 const tokenExpiry = Date.now() + parseInt(process.env.EXPIRES_IN_MILISECONDS);
                 await BlockedToken.create({ token: token, tokenExpiry: tokenExpiry });
 
-                const url = `https://perkwagon-test.netlify.app/auth/verifyEmail/${token}`;
+                const url = `${process.env.HOST}/auth/verifyEmail/${token}`;
 
                 // send the mail to the user
                 mailInfo = {

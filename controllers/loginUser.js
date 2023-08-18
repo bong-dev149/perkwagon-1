@@ -34,22 +34,20 @@ const loginUser = async (req, res) => {
         }
 
         //Get Access Token
-        const secretKey=(user.typeofuser==='admin')?process.env.JWT_ACCESS_SECRET_ADMIN:process.env.JWT_ACCESS_SECRET;
         const acccessToken = await tokenController.genToken(
-            { id: user.id, email: user.email },
+            { auth_id: user.auth_id, email: user.email },
             process.env.JWT_ACCESS_EXPIRES_IN,
-            secretKey
+            process.env.JWT_ACCESS_SECRET
         );
 
         // Get the timestamp of the token expiration
         const tokenExpiration = new Date(Date.now() + expiresInToMilliseconds(process.env.JWT_ACCESS_EXPIRES_IN)).toISOString();
 
         //Get Refresh Token
-        const refreshSecretKey=(user.typeofuser==='admin')?process.env.JWT_REFRESH_SECRET_ADMIN:process.env.JWT_REFRESH_SECRET;
         const refreshToken = await tokenController.genToken(
-            { id: user.id, email: user.email },
+            { auth_id: user.auth_id, email: user.email },
             process.env.JWT_REFRESH_EXPIRES_IN,
-            refreshSecretKey
+            process.env.JWT_REFRESH_SECRET
         );
 
         //send response
@@ -57,7 +55,7 @@ const loginUser = async (req, res) => {
 
     } catch (err) {
 
-        res.status(500).json({ error: 'Error logging in' });
+        res.status(500).json({ msg: 'Internal Server Error' });
     }
 }
 

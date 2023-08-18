@@ -19,7 +19,7 @@ const forgotPassword = async (req, res) => {
         }
         // if exists, generate token
         const resetToken = await genToken(
-            { id: user.id, email: user.email },
+            { auth_id: user.auth_id, email: user.email },
             process.env.JWT_VERIFY_EXPIRES_IN,
             process.env.JWT_SECRET
         );
@@ -30,7 +30,7 @@ const forgotPassword = async (req, res) => {
         await BlockedToken.create({ token:resetToken, tokenExpiry: resetTokenExpiry });
 
         // reset password link url
-        const url = `${process.env.HOST}/api/auth/resetPassword?token=${resetToken}`;
+        const url = `${process.env.HOST}/auth/resetPassword/${resetToken}`;
 
         const mailHTML = `Hi! ${email} please click on the link below to reset your password <a href=${url}>Reset Password</a>`
         const mailSubject = "Reset Password"
@@ -39,10 +39,10 @@ const forgotPassword = async (req, res) => {
         const emailResponse = await sendMail(email, mailSubject, mailHTML)
 
         //send respond
-        res.status(200).send(emailResponse)
+        res.status(200).send({msg:emailResponse})
 
     } catch (err) {
-        res.status(500).json({message: err.message});
+        res.status(500).json({msg: 'Internal Server Error'});
     }
 };
 

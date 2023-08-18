@@ -33,7 +33,7 @@ const updatePassword = async (req, res) => {
             //update password
             await Auth.update({ password: hashedPassword }, {
                 where: {
-                    id: user.id
+                    auth_id: user.auth_id
                 }
             });
 
