@@ -11,9 +11,12 @@ const forgotPassword = async (req, res) => {
         // check if the user exists or not
         const user = await Auth.findOne({ where: { email } });
         if (!user) {
-            return res.status(404).json({ type: 'userError', msg: 'User not found' });
+            return res.status(404).json({ msg: 'User not found' });
         }
-
+        //user not verified
+        if(user.verified===false){
+            return res.status(401).json({ msg: 'Email not verified' });
+        }
         // if exists, generate token
         const resetToken = await genToken(
             { id: user.id, email: user.email },
@@ -22,24 +25,24 @@ const forgotPassword = async (req, res) => {
         );
 
         // save token in database
-
+       
         const resetTokenExpiry = Date.now() + parseInt(process.env.EXPIRES_IN_MILISECONDS);
-        await BlockedToken.create({ token: resetToken, tokenExpiry: resetTokenExpiry });
+        await BlockedToken.create({ token:resetToken, tokenExpiry: resetTokenExpiry });
 
         // reset password link url
-        const url = `https://perkwagon-test.netlify.app/auth/updatePassword/${resetToken}`;
+        const url = `${process.env.HOST}/api/auth/resetPassword?token=${resetToken}`;
 
         const mailHTML = `Hi! ${email} please click on the link below to reset your password <a href=${url}>Reset Password</a>`
         const mailSubject = "Reset Password"
-
+        
 
         const emailResponse = await sendMail(email, mailSubject, mailHTML)
 
         //send respond
-        res.status(200).json({ msg: emailResponse })
+        res.status(200).send(emailResponse)
 
     } catch (err) {
-        res.status(500).json({ msg: err.message });
+        res.status(500).json({message: err.message});
     }
 };
 
