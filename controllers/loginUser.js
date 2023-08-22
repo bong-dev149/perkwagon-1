@@ -49,9 +49,20 @@ const loginUser = async (req, res) => {
             process.env.JWT_REFRESH_EXPIRES_IN,
             process.env.JWT_REFRESH_SECRET
         );
+        
+        // remove old refresh token from the cookie
+        res.clearCookie('refreshToken');
 
+        // store refresh token into the cookie
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+            secure: process.env.NODE_ENV === 'production' ? true : false
+        });
+        
         //send response
-        res.json({ msg: 'Login successful', typeofuser: user.typeofuser, acccessToken, tokenExpiration, refreshToken });
+        res.json({ msg: 'Login successful', typeofuser: user.typeofuser, acccessToken, tokenExpiration});
+
 
     } catch (err) {
 

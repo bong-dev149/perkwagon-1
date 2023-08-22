@@ -16,8 +16,8 @@ const confirmEmailResolver = async (user) => {
                 const tokenExpiry = Date.now() + parseInt(process.env.EXPIRES_IN_MILISECONDS);
                 await BlockedToken.create({ token: token, tokenExpiry: tokenExpiry });
 
-                const url = `${process.env.HOST}/auth/verifyEmail/${token}`;
-
+                // const url = `${process.env.HOST}/auth/verifyEmail/${token}`;
+                const url = `${process.env.HOST}/api/auth/verifyEmail?token=${token}`;
                 // send the mail to the user
                 mailInfo = {
                     to: user.email,

@@ -9,6 +9,7 @@ const { check } = require('express-validator');
 const updatePassword = require('../controllers/updatePassword');
 const resendEmail = require('../controllers/resendEmail');
 const tokenVerify = require('../middleware/tokenVerify');
+const logoutUser = require('../controllers/logoutUser');
 
 const registerValidationRules = [
     check('email').isEmail().withMessage('Invalid email address'),
@@ -29,4 +30,5 @@ router.post('/refreshtoken',refreshToken);
 router.post('/forgetPassword',loginValidationRules,forgetPassword);
 router.patch('/resetPassword', tokenVerify, updatePasswordRules, updatePassword );
 router.post('/resendEmail',resendEmail);
+router.get('/logout',logoutUser);
 module.exports = router;

@@ -6,7 +6,7 @@ require('dotenv/config');
 const verify = async (req, res) => {
     try {
         if (!req.error) {
-
+            console.log('Hello');
             //get data
             const user = req.user;
             const token = req.query.token;
