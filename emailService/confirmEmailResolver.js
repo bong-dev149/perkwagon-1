@@ -1,6 +1,5 @@
 const tokenController = require("../reusable_module/tokenController");
 const sendEmail = require("./sendMail");
-const BlockedToken = require("../models/BlockedToken");
 const confirmEmailResolver = async (user) => {
     return new Promise(async (resolve, reject) => {
         // if the user email is not confirmed
@@ -12,9 +11,6 @@ const confirmEmailResolver = async (user) => {
                     process.env.JWT_VERIFY_EXPIRES_IN,
                     process.env.JWT_SECRET
                 );
-           
-                const tokenExpiry = Date.now() + parseInt(process.env.EXPIRES_IN_MILISECONDS);
-                await BlockedToken.create({ token: token, tokenExpiry: tokenExpiry });
 
                 // const url = `${process.env.HOST}/auth/verifyEmail/${token}`;
                 const url = `${process.env.HOST}/api/auth/verifyEmail?token=${token}`;
@@ -24,7 +20,6 @@ const confirmEmailResolver = async (user) => {
                     subject: "Confirm your email",
                     html: `<h1>Hello ${user.email}</h1><p>Please click on the link below to confirm your email</p><a href="${url}">Confirm Email</a> within 30 minutes`,
                 };
-
                 resolve(await sendEmail(user.email, mailInfo.subject, mailInfo.html))
             } catch (err) {
                 reject(err)

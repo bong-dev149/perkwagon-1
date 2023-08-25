@@ -25,16 +25,20 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create a new user
-        user = await Auth.create({ email: email, password: hashedPassword, typeofuser: 'Normal' });
+        user = await Auth.create({ email: email, password: hashedPassword, typeofuser: 'Normal' , tokens: {tokens:[]}});
 
-        //send response
-        res.status(201).json({ msg: 'Verification email send to to your email address' });
-
+        
         //send confirmation email
         const msg = await cnfEmail(user);
         console.log(msg);
 
+
+        //send response
+        res.status(201).json({ msg: msg });
+
+
     } catch (err) {
+        console.log(err.message);
         res.status(500).json({ msg: 'Internal Server Error' });
 
     }

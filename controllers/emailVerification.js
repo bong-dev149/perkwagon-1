@@ -6,7 +6,6 @@ require('dotenv/config');
 const verify = async (req, res) => {
     try {
         if (!req.error) {
-            console.log('Hello');
             //get data
             const user = req.user;
             const token = req.query.token;
@@ -18,14 +17,8 @@ const verify = async (req, res) => {
                 }
             });
 
-            //set tokenExpiry field for Block the token
-            
-            const tokenExpiry = Date.now();
-            await BlockedToken.update({ tokenExpiry: tokenExpiry }, {
-                where: {
-                    token: token
-                }
-            });
+            // put the token into blocked token table
+            await BlockedToken.create({ token: token, tokenExpiry: Date.now() });
 
             //send response
             res.status(200).json({ msg: 'Successfully verified' });

@@ -1,3 +1,4 @@
+const { col } = require('sequelize');
 const Auth = require('../models/Auth');
 const tokenController = require('../reusable_module/tokenController');
 const { expiresInToMilliseconds } = require('../reusable_module/utils');
@@ -33,13 +34,18 @@ const loginUser = async (req, res) => {
             return res.status(401).json({ type:'invalid', msg: 'Invalid credentials' });
         }
 
+        // check if user is already logged in by checking the refresh token in cookie
+        if(req.cookies.refreshToken && user.tokens.tokens.includes(req.cookies.refreshToken)){
+            return res.status(400).json({ type: 'alreadyLoggedIn', msg: 'User already logged in' });
+        }
+
         //Get Access Token
         const acccessToken = await tokenController.genToken(
             { auth_id: user.auth_id, email: user.email },
             process.env.JWT_ACCESS_EXPIRES_IN,
             process.env.JWT_ACCESS_SECRET
         );
-
+        
         // Get the timestamp of the token expiration
         const tokenExpiration = new Date(Date.now() + expiresInToMilliseconds(process.env.JWT_ACCESS_EXPIRES_IN)).toISOString();
 
@@ -50,6 +56,11 @@ const loginUser = async (req, res) => {
             process.env.JWT_REFRESH_SECRET
         );
         
+        // Save refresh token to database
+        user.tokens = { tokens: [...user.tokens.tokens, refreshToken] };
+        await user.save();
+        
+
         // remove old refresh token from the cookie
         res.clearCookie('refreshToken');
 
@@ -65,7 +76,7 @@ const loginUser = async (req, res) => {
 
 
     } catch (err) {
-
+        console.log(err);
         res.status(500).json({ msg: 'Internal Server Error' });
     }
 }

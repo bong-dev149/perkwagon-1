@@ -5,11 +5,13 @@ const cors = require('cors');
 require('dotenv/config');
 const authRoutes = require('./routes/authRoute');
 const deleteExpiredTokens = require('./scheduled_tasks/deleteExpiredTokens');
+const cookieParser = require('cookie-parser');
 
 
 // Express middleware to parse JSON requests
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
 
 
 app.use('/api/auth', authRoutes);

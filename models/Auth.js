@@ -27,6 +27,10 @@ const Auth = sequelize.define('Auth', {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+    },
+    tokens:{
+        type: DataTypes.JSON,
+        allowNull: true,
     }
 },{
     tableName: 'auth'

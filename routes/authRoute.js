@@ -10,6 +10,8 @@ const updatePassword = require('../controllers/updatePassword');
 const resendEmail = require('../controllers/resendEmail');
 const tokenVerify = require('../middleware/tokenVerify');
 const logoutUser = require('../controllers/logoutUser');
+const logoutAll = require('../controllers/logoutAll');
+const { verifyToken } = require('../reusable_module/tokenController');
 
 const registerValidationRules = [
     check('email').isEmail().withMessage('Invalid email address'),
@@ -26,9 +28,10 @@ const updatePasswordRules = [
 router.get('/verifyEmail',tokenVerify, emailVerification);
 router.post('/register',registerValidationRules,  registerUser);
 router.post('/login', loginValidationRules, loginUser);
-router.post('/refreshtoken',refreshToken);
+router.post('/refreshtoken',tokenVerify,refreshToken);
 router.post('/forgetPassword',loginValidationRules,forgetPassword);
 router.patch('/resetPassword', tokenVerify, updatePasswordRules, updatePassword );
 router.post('/resendEmail',resendEmail);
-router.get('/logout',logoutUser);
+router.get('/logout',tokenVerify,logoutUser);
+router.get('/logoutAll',tokenVerify,logoutAll);
 module.exports = router;

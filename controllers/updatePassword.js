@@ -18,14 +18,7 @@ const updatePassword = async (req, res) => {
             const user = req.user;
             const { password } = req.body;
 
-            //set tokenExpiry field for Block the token
-          
-            const resetTokenExpiry = Date.now();
-            await BlockedToken.update({ tokenExpiry: resetTokenExpiry }, {
-                where: {
-                    token: resetToken
-                }
-            });
+            
 
             //hash the password
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -37,8 +30,14 @@ const updatePassword = async (req, res) => {
                 }
             });
 
+
+            // add token to blocked token table
+            await BlockedToken.create({ token: resetToken , tokenExpiry: Date.now()});
+
             //send response
             res.status(200).json({ msg: 'Password updated successfully' });
+
+
         } else {
             //send response
             res.status(400).json(req.error);
